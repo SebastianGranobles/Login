@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura - SIDE TEAM</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .factura-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            margin: auto;
+        }
+        h2 { color: #00c6ff; }
+        .factura-info { text-align: left; margin-top: 10px; }
+        .factura-info p { margin: 5px 0; }
+        .buttons {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            background-color: #00c6ff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #009ec3; }
+        .logout-button {
+            background-color: red;
+        }
+        .logout-button:hover {
+            background-color: darkred;
+        }
+        .logo {
+            margin-top: 20px;
+            width: 120px;
+        }
+    </style>
+</head>
+<body>
+    <div class="factura-container">
+        <h2>Factura - SIDE TEAM</h2>
+        <div class="factura-info">
+            <p><strong>Usuario:</strong> <span id="usuario"></span></p>
+            <p><strong>ID de Factura:</strong> <span id="idFactura"></span></p>
+            <p><strong>Eventos seleccionados:</strong> <span id="eventos"></span></p>
+            <p><strong>Número de eventos:</strong> <span id="numEventos"></span></p>
+            <p><strong>Lugar:</strong> Santiago de Cali</p>
+        </div>
+        <img src="Fotos/SIDE TEAM.png" alt="SIDE TEAM" class="logo">
+        <p><strong>MUCHAS GRACIAS POR COMPRAR EN SIDE TEAM.</strong></p>
+        <div class="buttons">
+            <button onclick="descargarFactura()">Descargar Factura (PDF)</button>
+            <button onclick="volverAEventos()">Agregar otro evento</button>
+            <button class="logout-button" onclick="cerrarSesion()">Salir</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let usuario = localStorage.getItem("usuario") || "Desconocido";
+            let eventos = localStorage.getItem("eventos") || "No seleccionado";
+
+            let idFactura = Math.floor(1000000000 + Math.random() * 9000000000);
+
+            document.getElementById("usuario").textContent = usuario;
+            document.getElementById("idFactura").textContent = idFactura;
+            document.getElementById("eventos").textContent = eventos;
+            
+            let numEventos = eventos !== "No seleccionado" ? eventos.split(", ").length : 0;
+            document.getElementById("numEventos").textContent = numEventos;
+        });
+
+        function descargarFactura() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let usuario = document.getElementById("usuario").textContent;
+            let idFactura = document.getElementById("idFactura").textContent;
+            let eventos = document.getElementById("eventos").textContent;
+            let numEventos = document.getElementById("numEventos").textContent;
+
+            // Agregar texto de la factura
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(18);
+            doc.text("Factura - SIDE TEAM", 70, 20);
+
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Usuario: ${usuario}`, 20, 40);
+            doc.text(`ID de Factura: ${idFactura}`, 20, 50);
+            doc.text(`Eventos seleccionados: ${eventos}`, 20, 60);
+            doc.text(`Número de eventos: ${numEventos}`, 20, 70);
+            doc.text("Lugar: Santiago de Cali", 20, 80);
+
+            // Agregar logo en la parte inferior
+            let logo = new Image();
+            logo.src = "Fotos/SIDE TEAM.PNG";  // Asegúrate de que la imagen esté en esta ruta
+            logo.onload = function () {
+                doc.addImage(logo, "PNG", 60, 160, 80, 50); // Posición (X, Y) y tamaño (Ancho, Alto)
+
+                // Agregar mensaje de agradecimiento
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text("MUCHAS GRACIAS POR COMPRAR EN SIDE TEAM.", 30, 220);
+
+                doc.save(`Factura_${idFactura}.pdf`);
+            };
+        }
+
+        function volverAEventos() {
+            window.location.href = "eventos.html";
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

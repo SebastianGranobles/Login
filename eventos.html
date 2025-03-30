@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos - SIDE TEAM</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f0f8ff; }
+        .eventos-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .evento {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .evento:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        .evento img { width: 200px; border-radius: 5px; }
+        .logout-button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            cursor: pointer;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .logout-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bienvenido a SIDE TEAM 🎉</h1>
+    <p>Selecciona tu tipo de evento:</p>
+    
+    <div class="eventos-container">
+        <div class="evento" onclick="registrarEvento('Reguetón')">
+            <img src="Fotos/reggaeton.webp" alt="Reguetón">
+        </div>
+        <div class="evento" onclick="registrarEvento('Electrónica')">
+            <img src="Fotos/Electronica.jpeg" alt="Electrónica">
+        </div>
+        <div class="evento" onclick="registrarEvento('Salsa')">
+            <img src="Fotos/salsa.webp" alt="Salsa">
+        </div>
+        <div class="evento" onclick="registrarEvento('Otros')">
+            <img src="Fotos/Generos de musica.jpg" alt="Otros eventos">
+        </div>
+    </div>
+    
+    <button class="logout-button" onclick="cerrarSesion()">Salir</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let usuario = localStorage.getItem("usuario");
+            let clave = localStorage.getItem("clave");
+
+            if (!usuario || !clave) {
+                window.location.href = "index.html";
+            }
+        });
+
+        function registrarEvento(evento) {
+            let eventosGuardados = localStorage.getItem("eventos");
+            let eventosActualizados = eventosGuardados ? eventosGuardados + ", " + evento : evento;
+            localStorage.setItem("eventos", eventosActualizados);
+            localStorage.setItem("pagina", "SIDE TEAM");
+            window.location.href = "factura.html";
+        }
+
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
